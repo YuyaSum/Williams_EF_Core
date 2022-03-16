@@ -94,9 +94,18 @@ namespace Williams_EF_Core.Controllers
             if (ModelState.IsValid)
             {
 
-                _context.Add(customer);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //Clearly not the best way to ensure that there are 100 in the database
+                //and doesn't give any indacation that it wasn't added either...
+
+                if (_context.Customers.Count() < 100)
+                {
+                    _context.Add(customer);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                else {
+                    return RedirectToAction(nameof(Index));
+                }
 
             }
             return View(customer);
